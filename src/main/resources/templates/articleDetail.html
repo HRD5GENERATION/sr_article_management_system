@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="ISO-8859-1"/>
+	<title>Article</title>
+	<style>
+		img{
+			width: 100px;
+			height: 100px;
+			border-radius: 10px;
+		}
+		table, th, td, tr{
+			border-collapse: collapse; 
+		}
+	</style>
+</head>
+<body>
+	<h1>Article Management System</h1>
+	<table border="1">
+		<tr th:object="${article}">
+			<th th:text="*{id}">Id</th>
+			<th>
+				<img th:src="*{thumbnail}"/>
+			</th>
+			<th th:text="*{title}">Title</th>
+			<th th:text="*{description}">Description</th>
+		</tr>
+	</table>
+	
+	
+</body>
+</html>
