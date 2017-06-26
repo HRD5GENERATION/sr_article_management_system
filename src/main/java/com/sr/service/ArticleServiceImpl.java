@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.sr.model.Article;
-import com.sr.repository.ArticleRepository;
+import com.sr.repository.mybatis.ArticleRepository;
 
 @Service
 public class ArticleServiceImpl implements ArticleService{
@@ -30,14 +30,17 @@ public class ArticleServiceImpl implements ArticleService{
 
 	@Override
 	public boolean remove(int id) {
-		// TODO Auto-generated method stub
-		return false;
+		return articleRepository.remove(id);
 	}
 
 	@Override
 	public boolean save(Article article) {
-		// TODO Auto-generated method stub
-		return false;
+		return articleRepository.save(article);
+	}
+
+	@Override
+	public boolean update(Article article) {
+		return articleRepository.update(article);
 	}
 
 }

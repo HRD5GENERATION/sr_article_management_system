@@ -1,23 +1,19 @@
 package com.sr.model;
 
-import java.util.List;
-
 public class Article {
 	private int id;
 	private String title;
 	private String description;
 	private String thumbnail;
-	private List<String> images;
 	public Article() {
 		super();
 	}
-	public Article(int id, String title, String description, String thumbnail, List<String> images) {
+	public Article(int id, String title, String description, String thumbnail) {
 		super();
 		this.id = id;
 		this.title = title;
 		this.description = description;
 		this.thumbnail = thumbnail;
-		this.images = images;
 	}
 	public int getId() {
 		return id;
@@ -43,15 +39,9 @@ public class Article {
 	public void setThumbnail(String thumbnail) {
 		this.thumbnail = thumbnail;
 	}
-	public List<String> getImages() {
-		return images;
-	}
-	public void setImages(List<String> images) {
-		this.images = images;
-	}
 	@Override
 	public String toString() {
 		return "Article [id=" + id + ", title=" + title + ", description=" + description + ", thumbnail=" + thumbnail
-				+ ", images=" + images + "]";
+				+ "]";
 	}
 }
