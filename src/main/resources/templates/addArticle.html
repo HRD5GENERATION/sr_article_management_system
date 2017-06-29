@@ -3,50 +3,56 @@
 <head>
 	<meta charset="ISO-8859-1"/>
 	<title th:text="${addStatus==true?'Add Article':'Update Article'}">Add Article</title>
+	<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/semantic-ui/2.2.10/semantic.min.css"/>
+	<script src="https://cdn.jsdelivr.net/semantic-ui/2.2.10/semantic.min.js"></script>
 </head>
 <body>
-	<h1 th:text="${addStatus==true?'Add Article':'Update Article'}">Add article</h1>
-	<form action="" th:action="${addStatus==true?'/article/save':'/article/update'}" th:object="${article}" method="POST" enctype="multipart/form-data">
-		<table>
-			<tr>
-				<td colspan="2" th:if="${#fields.hasErrors('*')}" th:text="#{table.error}"></td>
-			</tr>
-			<tr>
-				<td>Id</td>
-				<td>
-					<input type="text" th:field="*{id}"/>
-					<span th:if="${#fields.hasErrors('id')}" th:errors="*{id}">Error Message</span>
-				</td>
-			</tr>
-			<tr>
-				<td>Title</td>
-				<td>
-					<input type="text" th:field="*{title}"/>
-					<span th:if="${#fields.hasErrors('title')}" th:errors="*{title}">Error Message</span>
-				</td>
-			</tr>
-			<tr>
-				<td>Description</td>
-				<td>
-					<input type="text" th:field="*{description}"/>
-					<span th:if="${#fields.hasErrors('description')}" th:errors="*{description}">Error Message</span>
-				</td>
-				
-			</tr>
-			<tr>
-				<td>Thumbnail</td>
-				<td>
-					<input type="file" name="file"/>
-					<span th:if="${#fields.hasErrors('thumbnail')}" th:errors="*{thumbnail}">Error Message</span>
-				</td>
-			</tr>
-			<tr>
-				<td></td>
-				<td> <input type="submit" th:value="${addStatus==true?'Add':'Update'}"/></td>
-			</tr>
-			
-		</table> 
-		
-	</form>
+
+	<div class="ui stackable menu">
+		<div class="item">
+		   <img style="height:30px; width:30px;" src="https://semantic-ui.com/images/logo.png"/>
+		</div>
+		<a href="/" class="item active">Articles</a>
+		<a href="/category" class="item">Categories</a>
+		<a href="/about" class="item">About</a>
+	</div>
+	<div class="ui container">
+		<h1 th:text="${addStatus==true?'Add Article':'Update Article'}">Add article</h1>
+		<form class="ui form error" action="" th:action="${addStatus==true?'/article/save':'/article/update'}" th:object="${article}" method="POST" enctype="multipart/form-data">
+			<div th:if="${#fields.hasErrors('*')}" class="ui error message">
+			    <div class="header">Error Occur</div>
+			    <p>Please complete all the information!</p>
+			</div>
+			<div class="field">
+				<input type="hidden" th:field="*{id}"/>
+		  	</div>
+			<div class="field">
+		    	<label>Title</label>
+		    	<input type="text" th:field="*{title}"/>
+				<span th:if="${#fields.hasErrors('title')}" th:errors="*{title}" class="ui error message">Error Message</span>
+		  	</div>
+		  	<div class="field">
+		    	<label>Description</label>
+		    	<textarea rows="5" th:field="*{description}"></textarea>
+				<span th:if="${#fields.hasErrors('description')}" th:errors="*{description}" class="ui error message">Error Message</span>
+		  	</div>
+		  	<div class="field">
+		    	<label>Thumbnail</label>
+		  		<div th:if="${addStatus==false}">
+			  		<img th:src="*{thumbnail}" style="width:100px; height:100px"/>
+			  		<input type="hidden" th:field="*{thumbnail}"/>
+			  	</div>
+		    	<input type="file" name="file" th:attr="required=${addStatus==true?'true':'false'}"/>
+				<span th:if="${#fields.hasErrors('thumbnail')}" th:errors="*{thumbnail}" class="ui error message">Error Message</span>
+		  	</div>
+		  	
+		  	<div class="ui buttons right floated">
+			  <a href="/" class="ui button">Cancel</a>
+			  <div class="or"></div>
+			  <input class="ui positive button" type="submit" th:value="${addStatus==true?'Add':'Update'}"/>
+			</div>
+		</form>
+	</div>
 </body>
 </html>

@@ -2,7 +2,6 @@ package com.sr.configuration;
 
 import java.util.Locale;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,14 +16,14 @@ import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 @Configuration
 public class MultilanguageConfiguration extends WebMvcConfigurerAdapter{
 
-	/*private String []basenames = new String[]{ 
+	private String []basenames = new String[]{ 
 			  "i18n/article/index/messages", 
 			  "i18n/article/view/messages", 
 			  "i18n/validations/messages"
-	};*/
+	};
 	
-	@Value("${message.basenames}")
-	private String[] basenames;
+	/*@Value("${message.basenames}")
+	private String[] basenames;*/
 	
 	@Bean
 	@Description("Configure default locale")

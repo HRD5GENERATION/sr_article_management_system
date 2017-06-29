@@ -1,7 +1,5 @@
 package com.sr.model;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.NotEmpty;
@@ -13,10 +11,9 @@ public class Article {
 	@Size(min=10, max=100)
 	private String title;
 	
-	@Min(100) @Max(500)
+	@NotEmpty
 	private String description;
 	
-	@NotEmpty
 	private String thumbnail;
 	
 	public Article() {

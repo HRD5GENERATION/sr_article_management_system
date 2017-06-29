@@ -2,29 +2,28 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 	<meta charset="ISO-8859-1"/>
-	<title>Article</title>
-	<style>
-		img{
-			width: 100px;
-			height: 100px;
-			border-radius: 10px;
-		}
-		table, th, td, tr{
-			border-collapse: collapse; 
-		}
-	</style>
+	<title>Article Detail</title>
+	<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/semantic-ui/2.2.10/semantic.min.css"/>
+	<script src="https://cdn.jsdelivr.net/semantic-ui/2.2.10/semantic.min.js"></script>
 </head>
 <body>
-	<h1 th:text="#{view.title}">Article Detail</h1>
-	<table border="1">
-		<tr th:object="${article}">
-			<th th:text="*{id}">Id</th>
-			<th>
-				<img th:src="*{thumbnail}"/>
-			</th>
-			<th th:text="*{title}">Title</th>
-			<th th:text="*{description}">Description</th>
-		</tr>
-	</table>
+	<div class="ui stackable menu">
+		<div class="item">
+		   <img style="height:30px; width:30px;" src="https://semantic-ui.com/images/logo.png"/>
+		</div>
+		<a href="/" class="item active">Articles</a>
+		<a href="/category" class="item">Categories</a>
+		<a href="/about" class="item">About</a>
+	</div>
+	
+	<div class="ui container">
+		<div th:object="${article}">
+			<img th:src="*{thumbnail}" style="width: 300px; height: 300px;"/>
+			<p th:inline="text">ID: [[*{id}]]</p>
+			<p th:inline="text">Title: [[*{title}]]</p>
+			<p th:inline="text">Description: [[*{description}]]</p>
+		</div>
+	</div>
 </body>
 </html>

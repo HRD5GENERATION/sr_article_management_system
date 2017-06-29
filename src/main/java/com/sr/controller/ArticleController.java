@@ -92,11 +92,18 @@ public class ArticleController {
 	}	
 	
 	@PostMapping("/article/update")
-	public String update(@Valid @ModelAttribute("article") Article article, BindingResult result, Model model){
+	public String update(@RequestParam("file") MultipartFile file,
+				@Valid @ModelAttribute("article") Article article, BindingResult result, Model model){
 		if(result.hasErrors()){
 			model.addAttribute("article", article);
 			model.addAttribute("addStatus", false);
 			return "addarticle";
+		}
+		System.out.println(article);
+		System.out.println("file:" + file);
+		if(file != null){
+			String thumbnail = uploadService.upload(file);
+			article.setThumbnail(thumbnail);
 		}
 		if(articleService.update(article)){
 			System.out.println("success!");
