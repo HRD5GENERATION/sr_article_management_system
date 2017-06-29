@@ -7,30 +7,28 @@
 </head>
 <body>
 	<h1>Article Management System</h1>
-	<a href="/article/add">Add Article</a>
+	<a href="/article/add" th:href="@{/article/add}">Add Article</a>
 	<table border="1">
 		<tr>
-			<th>Id</th>
-			<th>Title</th>
-			<th>Description</th>
-			<th>Thumbnail</th>
-			<th>Action</th>
+			<th th:text="#{index.table.id}">No</th>
+			<th th:text="#{index.table.title}">Title</th>
+			<th th:text="#{index.table.desc}">Description</th>
+			<th th:text="#{index.table.thumbnail}">Thumbnail</th>
+			<th th:text="#{index.table.action}">Action</th>
 		</tr>
 		<tr th:each="article:${articles}" th:object="${article}">
-			<td th:text="*{id}">id</td>
-			<td th:text="*{title}">title</td>
-			<td th:text="*{description}">description</td>
+			<td th:text="${articleStat.count}">Id</td>
+			<td th:text="*{title}">Title</td>
+			<td th:text="*{description}">Description</td>
 			<td>
 				<img src="https://cdn-images-1.medium.com/max/800/1*qdFdhbR00beEaIKDI_WDCw.gif" th:src="*{thumbnail}"/>
 			</td>
 			<td>
-				<!--<a th:href="@{article/view(id=*{id})}">View</a> -->
 				<a th:href="@{article/{id}(id=*{id})}">View</a>
 				<a th:href="@{article/edit/{id}(id=*{id})}">Edit</a>
 				<a th:href="@{article/remove/{id}(id=*{id})}">Remove</a>
 			</td>
 		</tr>		
 	</table>
-	
 </body>
 </html>

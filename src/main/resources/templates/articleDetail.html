@@ -15,7 +15,7 @@
 	</style>
 </head>
 <body>
-	<h1>Article Detail</h1>
+	<h1 th:text="#{view.title}">Article Detail</h1>
 	<table border="1">
 		<tr th:object="${article}">
 			<th th:text="*{id}">Id</th>

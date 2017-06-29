@@ -7,11 +7,46 @@
 <body>
 	<h1 th:text="${addStatus==true?'Add Article':'Update Article'}">Add article</h1>
 	<form action="" th:action="${addStatus==true?'/article/save':'/article/update'}" th:object="${article}" method="POST" enctype="multipart/form-data">
-		Id: <input type="text" th:field="*{id}"/>
-		Title: <input type="text" th:field="*{title}"/>
-		Description: <input type="text" th:field="*{description}"/>
-		Thumbnail: <input type="file" name="file"/>
-		<input type="submit" value="SAVE"/>
+		<table>
+			<tr>
+				<td colspan="2" th:if="${#fields.hasErrors('*')}" th:text="#{table.error}"></td>
+			</tr>
+			<tr>
+				<td>Id</td>
+				<td>
+					<input type="text" th:field="*{id}"/>
+					<span th:if="${#fields.hasErrors('id')}" th:errors="*{id}">Error Message</span>
+				</td>
+			</tr>
+			<tr>
+				<td>Title</td>
+				<td>
+					<input type="text" th:field="*{title}"/>
+					<span th:if="${#fields.hasErrors('title')}" th:errors="*{title}">Error Message</span>
+				</td>
+			</tr>
+			<tr>
+				<td>Description</td>
+				<td>
+					<input type="text" th:field="*{description}"/>
+					<span th:if="${#fields.hasErrors('description')}" th:errors="*{description}">Error Message</span>
+				</td>
+				
+			</tr>
+			<tr>
+				<td>Thumbnail</td>
+				<td>
+					<input type="file" name="file"/>
+					<span th:if="${#fields.hasErrors('thumbnail')}" th:errors="*{thumbnail}">Error Message</span>
+				</td>
+			</tr>
+			<tr>
+				<td></td>
+				<td> <input type="submit" th:value="${addStatus==true?'Add':'Update'}"/></td>
+			</tr>
+			
+		</table> 
+		
 	</form>
 </body>
 </html>
