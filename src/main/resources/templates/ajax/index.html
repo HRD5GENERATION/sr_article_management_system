@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1"/>
+	<title>Insert title here</title>
+</head>
+<body>
+	<div id="content">
+		<table>
+			<thead>
+				<tr>
+					<th>Id</th>
+					<th>Title</th>
+				</tr>
+			</thead>
+			<tbody>
+			
+			</tbody>
+		</table>
+		
+	</div>
+	<button id="load">Load more</button>
+	
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<script>
+		(function(){
+			$.ajax({
+				url: '/ajax/articles',
+				method: 'GET',
+				success: function(data){
+					var tr = "";
+					data.forEach(function(d){
+						tr += "<tr><td>" + d.id + "</td><td>" + d.title + "</td></tr>";
+					});
+					
+					$('tbody').html(tr);
+				},
+				error: function(error){
+					console.log(error);
+				}
+			});
+		})();
+	</script>
+</body>
+</html>

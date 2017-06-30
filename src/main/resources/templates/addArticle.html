@@ -1,23 +1,11 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorator="layouts/default">
 <head>
-	<meta charset="ISO-8859-1"/>
-	<title th:text="${addStatus==true?'Add Article':'Update Article'}">Add Article</title>
-	<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/semantic-ui/2.2.10/semantic.min.css"/>
-	<script src="https://cdn.jsdelivr.net/semantic-ui/2.2.10/semantic.min.js"></script>
 </head>
-<body>
-
-	<div class="ui stackable menu">
-		<div class="item">
-		   <img style="height:30px; width:30px;" src="https://semantic-ui.com/images/logo.png"/>
-		</div>
-		<a href="/" class="item active">Articles</a>
-		<a href="/category" class="item">Categories</a>
-		<a href="/about" class="item">About</a>
-	</div>
-	<div class="ui container">
+<body>	
+	<div class="ui container" layout:fragment="content">
 		<h1 th:text="${addStatus==true?'Add Article':'Update Article'}">Add article</h1>
 		<form class="ui form error" action="" th:action="${addStatus==true?'/article/save':'/article/update'}" th:object="${article}" method="POST" enctype="multipart/form-data">
 			<div th:if="${#fields.hasErrors('*')}" class="ui error message">
