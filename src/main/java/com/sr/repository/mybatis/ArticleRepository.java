@@ -33,4 +33,5 @@ public interface ArticleRepository {
 	
 	@Update("UPDATE tbarticle SET title=#{title}, description=#{description}, thumbnail=#{thumbnail} WHERE id=#{id}")
 	boolean update(Article article);
+	
 }

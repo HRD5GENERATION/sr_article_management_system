@@ -14,4 +14,5 @@ public interface ArticleService {
 	boolean save(Article article);
 	
 	boolean update(Article article);
+	
 }
