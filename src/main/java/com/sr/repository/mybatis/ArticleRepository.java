@@ -4,22 +4,25 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Result;
+import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.SelectProvider;
 import org.apache.ibatis.annotations.Update;
 import org.springframework.stereotype.Repository;
 
 import com.sr.model.Article;
+import com.sr.model.filter.ArticleFilter;
+import com.sr.repository.mybatis.provider.ArticleProvider;
 
 @Repository
 public interface ArticleRepository {
 
-	@Select("SELECT id, title, description, thumbnail FROM tbarticle")
-	/*@Results({
-		@Result(property="id", column="id"),
-		@Result(property="title", column="title"),
-		@Result(property="description", column="description"),
-		@Result(property="thumbnail", column="thumbnail")
-	})*/
+	@SelectProvider(method="findAll", type=ArticleProvider.class)
+	@Results({
+		@Result(property="category.id", column="categoryId"),
+		@Result(property="category.name", column="name")
+	})
 	List<Article> findAll();
 
 	@Select("SELECT * FROM tbarticle WHERE id=#{id}")
@@ -33,5 +36,19 @@ public interface ArticleRepository {
 	
 	@Update("UPDATE tbarticle SET title=#{title}, description=#{description}, thumbnail=#{thumbnail} WHERE id=#{id}")
 	boolean update(Article article);
+	
+	
+	
+	@SelectProvider(method = "findAllFilter", type = ArticleProvider.class)
+	List<Article> findAllFilter(ArticleFilter filter);
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 }

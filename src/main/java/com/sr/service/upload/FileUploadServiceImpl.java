@@ -8,15 +8,21 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Description;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 @Service
+@PropertySource("classpath:ams.properties")
 public class FileUploadServiceImpl implements FileUploadService{
 	
-	private String SERVER_PATH = "/opt/images/";
-	private String CLIENT_PATH = "/resources/images/";
+	@Value("${file.server.path}")
+	private String SERVER_PATH;
+	
+	@Value("${file.client.path}")
+	private String CLIENT_PATH;
 	
 	@Override
 	public String upload(MultipartFile file) {

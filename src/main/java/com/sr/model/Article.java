@@ -5,7 +5,6 @@ import javax.validation.constraints.Size;
 import org.hibernate.validator.constraints.NotEmpty;
 
 public class Article {
-	
 	private int id;
 	
 	@Size(min=10, max=100)
@@ -15,6 +14,8 @@ public class Article {
 	private String description;
 	
 	private String thumbnail;
+	
+	private Category category;
 	
 	public Article() {
 		super();
@@ -50,9 +51,15 @@ public class Article {
 	public void setThumbnail(String thumbnail) {
 		this.thumbnail = thumbnail;
 	}
+	public Category getCategory() {
+		return category;
+	}
+	public void setCategory(Category category) {
+		this.category = category;
+	}
 	@Override
 	public String toString() {
 		return "Article [id=" + id + ", title=" + title + ", description=" + description + ", thumbnail=" + thumbnail
-				+ "]";
+				+ ", category=" + category + "]";
 	}
 }

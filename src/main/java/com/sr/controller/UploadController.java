@@ -1,16 +1,14 @@
 package com.sr.controller;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.List;
-import java.util.UUID;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+
+import com.sr.service.upload.FileUploadService;
 
 @Controller
 public class UploadController {
@@ -45,10 +43,15 @@ public class UploadController {
 		return "fileupload";
 	}*/
 	
+	@Autowired
+	private FileUploadService fileUploadService;
+	
 	@PostMapping("/file/upload")
 	public String upload(@RequestParam("file") List<MultipartFile> files){
 		
-		String uploadPath = "/opt/images/";
+		System.out.println(fileUploadService.upload(files));
+		
+		/*String uploadPath = "/opt/images/";
 		File path = new File(uploadPath);
 		if(!path.exists())
 			path.mkdirs();
@@ -65,7 +68,7 @@ public class UploadController {
 			} catch (IOException e) {
 				System.out.println(e.getMessage());
 			}
-		}
+		}*/
 		return "fileupload";
 	}
 }
