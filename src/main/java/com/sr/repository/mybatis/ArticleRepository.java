@@ -40,7 +40,6 @@ public interface ArticleRepository {
 	boolean update(Article article);
 	
 	
-	
 	@SelectProvider(method = "findAllFilter", type = ArticleProvider.class)
 	@Results({
 		@Result(property="category.id", column="categoryId"),

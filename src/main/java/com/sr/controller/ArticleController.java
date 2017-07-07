@@ -1,5 +1,7 @@
 package com.sr.controller;
 
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +17,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.sr.model.Article;
+import com.sr.model.filter.ArticleFilter;
 import com.sr.service.article.ArticleService;
 import com.sr.service.upload.FileUploadService;
+import com.sr.utility.Paging;
 
 @Controller
 public class ArticleController {
@@ -31,8 +35,13 @@ public class ArticleController {
 	}
 	
 	@GetMapping({"/", "/home", "/index", "/article"})
-	public String homePage(ModelMap model){
-		model.addAttribute("articles", articleService.findAll());
+	public String home(ArticleFilter filter, Paging paging, Model model){
+		
+		List<Article> articles = articleService.findAllFilter(filter, paging);
+		
+		model.addAttribute("articles", articles);
+		model.addAttribute("paging", paging);
+		
 		return "article";
 	}
 

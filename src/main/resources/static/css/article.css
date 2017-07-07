@@ -1,8 +1,7 @@
-img {
-	width: 100px;
-	height: 100px;
+div.footer{
+	margin-top: 50px;
 }
 
-table, th, td, tr {
-	border-collapse: collapse;
+div.footer h3 {
+	margin-top:10px;
 }

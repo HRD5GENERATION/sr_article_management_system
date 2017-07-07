@@ -18,7 +18,9 @@ public class ArticleProvider {
 	}
 	
 	public String findAllFilter(@Param("filter") ArticleFilter filter, @Param("paging") Paging paging){
+		
 		System.out.println("Filter" + filter);
+		
 		return new SQL(){{
 			SELECT("A.id, A.title, A.description, A.thumbnail, C.name, C.id AS \"categoryId\"");
 			FROM("tbarticle A");
