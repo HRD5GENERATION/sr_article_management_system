@@ -19,6 +19,6 @@ public class ArticleRestController {
 	//http://localhost:8080/article/rest?title=a&categoryId=1
 	@GetMapping("/article/rest")
 	public List<Article> findAllArticleFilter(ArticleFilter filter){
-		return aRepo.findAllFilter(filter);
+		return aRepo.findAllFilter(filter, null);
 	}
 }

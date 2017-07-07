@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.Select;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Repository;
 import com.sr.model.Article;
 import com.sr.model.filter.ArticleFilter;
 import com.sr.repository.mybatis.provider.ArticleProvider;
+import com.sr.utility.Paging;
 
 @Repository
 public interface ArticleRepository {
@@ -40,15 +42,14 @@ public interface ArticleRepository {
 	
 	
 	@SelectProvider(method = "findAllFilter", type = ArticleProvider.class)
-	List<Article> findAllFilter(ArticleFilter filter);
+	@Results({
+		@Result(property="category.id", column="categoryId"),
+		@Result(property="category.name", column="name")
+	})
+	List<Article> findAllFilter(@Param("filter") ArticleFilter filter, @Param("paging") Paging paging);
 	
-	
-	
-	
-	
-	
-	
-	
+	@SelectProvider(method = "countAllFilter", type = ArticleProvider.class)
+	Integer countAllFilter(@Param("filter") ArticleFilter filter);
 	
 	
 }

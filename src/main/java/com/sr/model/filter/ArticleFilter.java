@@ -4,6 +4,7 @@ public class ArticleFilter {
 	
 	private String title;
 	private Integer categoryId;
+	
 	public String getTitle() {
 		return title;
 	}

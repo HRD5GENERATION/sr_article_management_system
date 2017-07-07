@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.sr.model.Article;
-import com.sr.service.ArticleService;
+import com.sr.service.article.ArticleService;
 import com.sr.service.upload.FileUploadService;
 
 @Controller
@@ -31,25 +31,8 @@ public class ArticleController {
 	}
 	
 	@GetMapping({"/", "/home", "/index", "/article"})
-	public String homePage(ModelMap model, @RequestParam(value="page", required=false, defaultValue="1") Integer page){
-		
-		int totalPage = 10, startPage = 1, endPage = totalPage, defaultPageShow = 3;
-
-		startPage = page = (page<1) ? 1 : page;
-		startPage = page = (page > totalPage) ? totalPage : page;
-		
-		if((endPage - startPage) > defaultPageShow)
-			endPage = defaultPageShow + startPage;
-		else
-			startPage = totalPage - defaultPageShow;
-			
-		model.addAttribute("startPage", startPage);
-		model.addAttribute("endPage", endPage);
-		
-		model.addAttribute("totalPage", totalPage);
-		model.addAttribute("page", page);
+	public String homePage(ModelMap model){
 		model.addAttribute("articles", articleService.findAll());
-		
 		return "article";
 	}
 

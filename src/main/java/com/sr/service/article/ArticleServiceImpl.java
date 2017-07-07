@@ -1,4 +1,4 @@
-package com.sr.service;
+package com.sr.service.article;
 
 import java.util.List;
 
@@ -6,7 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.sr.model.Article;
+import com.sr.model.filter.ArticleFilter;
 import com.sr.repository.mybatis.ArticleRepository;
+import com.sr.utility.Paging;
 
 @Service
 public class ArticleServiceImpl implements ArticleService{
@@ -42,5 +44,13 @@ public class ArticleServiceImpl implements ArticleService{
 	public boolean update(Article article) {
 		return articleRepository.update(article);
 	}
+
+	@Override
+	public List<Article> findAllFilter(ArticleFilter filter, Paging paging) {
+		paging.setTotalCount(articleRepository.countAllFilter(filter));
+		return articleRepository.findAllFilter(filter, paging);
+	}
+	
+	
 
 }
