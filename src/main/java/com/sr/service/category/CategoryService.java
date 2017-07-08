@@ -1,5 +1,11 @@
 package com.sr.service.category;
 
-public interface CategoryService {
+import java.util.List;
 
+import com.sr.model.Category;
+
+public interface CategoryService {
+	
+	List<Category> findAll();
+	
 }

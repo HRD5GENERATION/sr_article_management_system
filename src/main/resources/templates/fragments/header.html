@@ -1,8 +1,9 @@
 <div class="ui stackable menu" th:fragment="header">
 	<div class="item">
 		<img style="height: 30px; width: 30px;"
-			src="https://semantic-ui.com/images/logo.png" />
+			th:src="@{https://semantic-ui.com/images/logo.png}" />
 	</div>
-	<a href="/" class="item active">Articles</a> <a href="/category"
-		class="item">Categories</a> <a href="/about" class="item">About</a>
+	<a href="/" class="item active">Articles</a> 
+	<a href="/category" class="item">Categories</a> 
+	<a href="/about" class="item">About</a>
 </div>

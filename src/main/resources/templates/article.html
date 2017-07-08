@@ -5,21 +5,27 @@
 	  <head>
 	  	<title>Article Management System</title>
 	  	<link rel="stylesheet" th:href="@{/css/article.css}"/>
+	  	
 	  </head>
 <body>
 	<div class="ui container" layout:fragment="content">	
-		<h1>Article Management System</h1>
+		<h1 class="ui">Article Management System</h1>
 		
-		<a class="ui primary basic button" href="/article/add" th:href="@{/article/add}">
-			<i class="write icon"></i>
-			<span>Add Article</span>
-		</a>
-		
-		<div class="ui info message" th:unless="${#lists.size(articles) != 0}">
-			  <div class="header">No Article</div>
-			  <p>There is no article to show.</p>
+		<div class="ui">
+			<a class="ui primary basic button" href="/article/add" th:href="@{/article/add}">
+				<i class="write icon"></i>
+				<span>Add Article</span>
+			</a>
+			<select class="ui dropdown">
+				  <option value="">Category</option>
+				  <option th:each="category: ${categories}" th:value="${category.id}" th:text="${category.name}">Technology</option>
+			</select>
+			<div class="ui icon input">
+				  <input type="text" id="searchByTitle" th:value="${filter.title}" placeholder="Search by title..."/>
+				  <i class="search icon"></i>
+			</div>
 		</div>
-		
+
 		<table class="ui celled table" th:if="${#lists.size(articles) != 0}">
 			<thead>
 				<tr>
@@ -50,19 +56,67 @@
 				 	<th colspan="5">
 				      <div class="ui small right floated pagination menu">
 				        
-				        <a class="icon item" title="First" th:href="@{/article(page=1)}"><i class="left long arrow icon"></i></a>
-				        <a class="item" th:href="@{/article(page=${paging.previousPage})}">Previous</a>
+				        <a class="icon item" title="First" th:href="@{/(page=1, title=${filter.title}, categoryId=${filter.categoryId})}"><i class="left long arrow icon"></i></a>
+				        <a class="item" th:href="@{/(page=${paging.previousPage}, title=${filter.title}, categoryId=${filter.categoryId})}">Previous</a>
 				        
-				        <a class="item" th:each="i: ${#numbers.sequence(paging.startPage, paging.endPage)}" th:text="${i}" th:classappend="${paging.page}==${i}?'active'" th:href="@{/article(page=${i})}">1</a>
+				        <a class="item" th:each="i: ${#numbers.sequence(paging.startPage, paging.endPage)}" th:text="${i}" th:classappend="${paging.page}==${i}?'active'" th:href="@{/(page=${i}, title=${filter.title}, categoryId=${filter.categoryId})}">1</a>
 				        
-				        <a class="item" th:href="@{/article(page=${paging.nextPage})}">Next</a>
-				        <a class="icon item" title="Last" th:href="@{/article(page=${paging.totalPages})}"><i class="right long arrow icon"></i></a>
+				        <a class="item" th:href="@{/(page=${paging.nextPage}, title=${filter.title}, categoryId=${filter.categoryId})}">Next</a>
+				        <a class="icon item" title="Last" th:href="@{/(page=${paging.totalPages}, title=${filter.title}, categoryId=${filter.categoryId})}"><i class="right long arrow icon"></i></a>
 				      
 				      </div>				      
 				    </th>
 				  </tr>
 			</tfoot>
 		</table>
+		<div class="ui info message" th:unless="${#lists.size(articles) != 0}">
+			  <div class="header">No Article</div>
+			  <p>There is no article to show.</p>
+		</div>
+		
 	</div>
+	<th:block layout:fragment="script">
+  	  		<script th:inline="javascript">
+  	  			(function(){
+		  	  	    
+  	  				//TODO: Retrieve data from model
+  	  				/*<![CDATA[*/
+		  	  	    var filter = /*[[${filter}]]*/ "";
+		  	  	    /*]]>*/
+		  	  	
+		  	  	    //TODO:
+  	  				var search = {
+		  	  	    	title: filter.title == null ? '' : filter.title,
+		  	  	    	categoryId: filter.categoryId == null ? '' : filter.categoryId
+		  	  	    };
+  	  			
+  	  				//TODO: Semantic Initialized, Set selected category
+  	  				$('.ui.dropdown')
+  	  					.dropdown('set selected', filter.categoryId)
+	  	  				.dropdown({
+		  	  				onChange: function(value, text){
+		  	  					search.categoryId = value;
+		  	  					searchArticle(search);
+		  	  				}
+	  	  			});
+  	  			
+	  	  			//TODO: OnSearch Enter Event
+	  	  			$('#searchByTitle').keyup(function(e){
+	  	  				if(e.keyCode == 13){
+		  	  				search.title = $('#searchByTitle').val();
+	  	  					searchArticle(search);
+	  	  				}
+	  	  			});
+	  	  			
+  	  			})();
+  	  			
+  	  			//TODO: search by title or by categoryId
+  	  			var searchArticle = function(search){
+  	  				location.href = "/?page=1&title=" + search.title + "&categoryId=" + search.categoryId;
+  	  			}
+  	  			
+  	  		</script>
+  	 </th:block>
 </body>
+
 </html>

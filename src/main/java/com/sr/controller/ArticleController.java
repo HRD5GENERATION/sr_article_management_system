@@ -1,7 +1,5 @@
 package com.sr.controller;
 
-import java.util.List;
-
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.sr.model.Article;
 import com.sr.model.filter.ArticleFilter;
 import com.sr.service.article.ArticleService;
+import com.sr.service.category.CategoryService;
 import com.sr.service.upload.FileUploadService;
 import com.sr.utility.Paging;
 
@@ -27,19 +26,21 @@ public class ArticleController {
 	
 	private ArticleService articleService;
 	private FileUploadService uploadService;
+	private CategoryService categoryService;
 	
 	@Autowired
-	public ArticleController(ArticleService articleService, FileUploadService uploadService) {
+	public ArticleController(ArticleService articleService, CategoryService categoryService, FileUploadService uploadService) {
 		this.articleService = articleService;
 		this.uploadService = uploadService;	
+		this.categoryService = categoryService;
 	}
 	
 	@GetMapping({"/", "/home", "/index", "/article"})
 	public String home(ArticleFilter filter, Paging paging, Model model){
 		
-		List<Article> articles = articleService.findAllFilter(filter, paging);
-		
-		model.addAttribute("articles", articles);
+		model.addAttribute("categories", categoryService.findAll());
+		model.addAttribute("articles", articleService.findAllFilter(filter, paging));
+		model.addAttribute("filter", filter);
 		model.addAttribute("paging", paging);
 		
 		return "article";
