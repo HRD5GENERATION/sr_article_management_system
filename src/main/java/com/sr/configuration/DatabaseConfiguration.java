@@ -20,14 +20,6 @@ public class DatabaseConfiguration {
 	private Environment env;
 	
 	@Bean
-	@Profile("memDb")
-	public DataSource inMemoryDb(){
-		EmbeddedDatabaseBuilder builder = new EmbeddedDatabaseBuilder();
-		builder.setType(EmbeddedDatabaseType.H2).addScript("db/create-db.sql");
-		return builder.build();
-	}
-	
-	@Bean
 	@Profile("devDb")
 	public DataSource devDb(){
 		DriverManagerDataSource dataSource = new DriverManagerDataSource();
@@ -48,4 +40,25 @@ public class DatabaseConfiguration {
 		dataSource.setPassword(env.getProperty("pro.datasource.password"));
 		return dataSource;
 	}
+	
+	@Bean
+	@Profile("memDb")
+	public DataSource inMemoryDb(){
+		EmbeddedDatabaseBuilder builder = new EmbeddedDatabaseBuilder();
+		builder.setType(EmbeddedDatabaseType.H2)
+			   .addScript("db/schema.sql")
+			   .addScript("db/data.sql");
+		return builder.build();
+	}
+	
+	/*@Value("classpath:db/schema.sql")
+	private Resource schema;
+	
+	@Value("classpath:db/data.sql")
+	private Resource data;
+	
+	private void initializeDatabase(DataSource dataSource) {
+		DatabasePopulator populator = new ResourceDatabasePopulator(schema, data);
+		DatabasePopulatorUtils.execute(populator, dataSource);
+	}*/
 }
