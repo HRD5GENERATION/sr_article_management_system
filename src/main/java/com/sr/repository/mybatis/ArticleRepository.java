@@ -27,16 +27,19 @@ public interface ArticleRepository {
 	})
 	List<Article> findAll();
 
-	@Select("SELECT * FROM tbarticle WHERE id=#{id}")
+	@Select("SELECT id, title, description, thumbnail, category_id FROM tbarticle WHERE id=#{id}")
+	@Results({
+		@Result(property="category.id", column="category_id")
+	})
 	Article findOne(int id);
 
 	@Delete("DELETE FROM tbarticle WHERE id=#{id}")
 	boolean remove(int id);
 	
-	@Insert("INSERT INTO tbarticle(title, description, thumbnail) VALUES(#{title}, #{description}, #{thumbnail})")
+	@Insert("INSERT INTO tbarticle(title, description, thumbnail, category_id) VALUES(#{title}, #{description}, #{thumbnail}, #{category.id})")
 	boolean save(Article article);
 	
-	@Update("UPDATE tbarticle SET title=#{title}, description=#{description}, thumbnail=#{thumbnail} WHERE id=#{id}")
+	@Update("UPDATE tbarticle SET title=#{title}, description=#{description}, thumbnail=#{thumbnail}, category_id=#{category.id} WHERE id=#{id}")
 	boolean update(Article article);
 	
 	

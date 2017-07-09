@@ -27,6 +27,14 @@
 				<span th:if="${#fields.hasErrors('description')}" th:errors="*{description}" class="ui error message">Error Message</span>
 		  	</div>
 		  	<div class="field">
+		    	<label>Category</label>
+		  		<select class="ui dropdown" th:name="category.id">
+					  <option value="">Choose Category</option>
+					  <option th:each="category: ${categories}" th:value="${category.id}" th:text="${category.name}">Technology</option>
+				</select>
+				<span th:if="${#fields.hasErrors('category.id')}" th:errors="*{category.id}" class="ui error message">Error Message</span>
+		  	</div>
+		  	<div class="field">
 		    	<label>Thumbnail</label>
 		  		<div th:if="${addStatus==false}">
 			  		<img th:src="*{thumbnail}" style="width:100px; height:100px"/>
@@ -35,7 +43,6 @@
 		    	<input type="file" name="file" th:attr="required=${addStatus==true?'true':'false'}"/>
 				<span th:if="${#fields.hasErrors('thumbnail')}" th:errors="*{thumbnail}" class="ui error message">Error Message</span>
 		  	</div>
-		  	
 		  	<div class="ui buttons right floated">
 			  <a href="/" class="ui button">Cancel</a>
 			  <div class="or"></div>
@@ -43,5 +50,25 @@
 			</div>
 		</form>
 	</div>
+	
+	<th:block layout:fragment="script">
+  	  		<script th:inline="javascript">
+  	  			(function(){
+  	  				//TODO: Retrieve data from model
+  	  				/*<![CDATA[*/
+		  	  	    var categoryId = /*[[${article.category.id}]]*/ "";
+		  	  	    /*]]>*/
+  	  				
+  	  				//TODO: Semantic Initialized, Set selected category
+  	  				$('.ui.dropdown')
+  	  					.dropdown('set selected', categoryId)
+	  	  				.dropdown({
+		  	  				onChange: function(value, text){	
+		  	  					console.log(value);
+		  	  				}
+	  	  			});
+  	  			})();
+  	  		</script>
+  	 </th:block>
 </body>
 </html>

@@ -46,7 +46,7 @@ public class ArticleController {
 		return "article";
 	}
 
-	@GetMapping(value="/article/view", params="id")
+	@GetMapping(value="/article/view")
 	public String detailPage(ModelMap model, @RequestParam("id") Integer id){
 		Article article = articleService.findOne(id);
 		model.addAttribute("article", article);
@@ -72,8 +72,11 @@ public class ArticleController {
 	public String save(@RequestParam("file") MultipartFile file, 
 					   @Valid Article article, BindingResult result, ModelMap model){
 		
+		System.out.println("article: " + article);
+		
 		if(result.hasErrors()){
 			model.addAttribute("article", article);
+			model.addAttribute("categories", categoryService.findAll());
 			model.addAttribute("addStatus", true);
 			return "addarticle";
 		}
@@ -90,6 +93,7 @@ public class ArticleController {
 	@GetMapping("/article/add")
 	public String addPage(ModelMap model){
 		model.addAttribute("article", new Article());
+		model.addAttribute("categories", categoryService.findAll());
 		model.addAttribute("addStatus", true);
 		return "addarticle";
 	}	
@@ -97,6 +101,7 @@ public class ArticleController {
 	@GetMapping("/article/edit/{id}")
 	public String editPage(@PathVariable("id") Integer id, ModelMap model){
 		model.addAttribute("article", articleService.findOne(id));
+		model.addAttribute("categories", categoryService.findAll());
 		model.addAttribute("addStatus", false);
 		return "addarticle";
 	}	
@@ -106,6 +111,7 @@ public class ArticleController {
 				@Valid @ModelAttribute("article") Article article, BindingResult result, Model model){
 		if(result.hasErrors()){
 			model.addAttribute("article", article);
+			model.addAttribute("categories", categoryService.findAll());
 			model.addAttribute("addStatus", false);
 			return "addarticle";
 		}
