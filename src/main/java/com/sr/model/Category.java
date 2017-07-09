@@ -2,7 +2,11 @@ package com.sr.model;
 
 import java.util.List;
 
+import javax.validation.constraints.NotNull;
+
 public class Category {
+	
+	@NotNull
 	private int id;
 	private String name;
 	

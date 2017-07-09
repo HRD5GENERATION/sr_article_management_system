@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.sr.model.Article;
 import com.sr.model.filter.ArticleFilter;
@@ -46,33 +47,36 @@ public class ArticleController {
 		return "article";
 	}
 
-	@GetMapping(value="/article/view")
-	public String detailPage(ModelMap model, @RequestParam("id") Integer id){
-		Article article = articleService.findOne(id);
-		model.addAttribute("article", article);
-		return "articledetail";
-	}
-	
-	@GetMapping("/article/{id}")
-	public String detailPage1(ModelMap model, @PathVariable("id") Integer id){
+	@GetMapping(value="/article/view/{id}")
+	public String detailPage(ModelMap model, @PathVariable("id") Integer id){
 		Article article = articleService.findOne(id);
 		model.addAttribute("article", article);
 		return "articledetail";
 	}
 	
 	@GetMapping("/article/remove/{id}")
-	public String remove(ModelMap model, @PathVariable("id") Integer id){
+	public String remove(@PathVariable("id") Integer id, ArticleFilter filter, Paging paging, RedirectAttributes rda){
 		if(articleService.remove(id)){
 			System.out.println("success!");
+			rda.addFlashAttribute("articleFilter", filter);
+			rda.addFlashAttribute("paging", paging);
 		}
 		return "redirect:/article";
+	}
+
+	@GetMapping("/article/add")
+	public String addPage(ModelMap model){
+		model.addAttribute("article", new Article());
+		model.addAttribute("categories", categoryService.findAll());
+		model.addAttribute("addStatus", true);
+		return "addarticle";
 	}
 	
 	@PostMapping("/article/save")
 	public String save(@RequestParam("file") MultipartFile file, 
-					   @Valid Article article, BindingResult result, ModelMap model){
+					   @Valid Article article, BindingResult result, Model model){
 		
-		System.out.println("article: " + article);
+		System.out.println(article);
 		
 		if(result.hasErrors()){
 			model.addAttribute("article", article);
@@ -89,14 +93,6 @@ public class ArticleController {
 		}
 		return "redirect:/article";
 	}
-	
-	@GetMapping("/article/add")
-	public String addPage(ModelMap model){
-		model.addAttribute("article", new Article());
-		model.addAttribute("categories", categoryService.findAll());
-		model.addAttribute("addStatus", true);
-		return "addarticle";
-	}	
 	
 	@GetMapping("/article/edit/{id}")
 	public String editPage(@PathVariable("id") Integer id, ModelMap model){

@@ -9,6 +9,8 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
+import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 
 @Configuration
 @PropertySource("classpath:ams.properties")
@@ -16,6 +18,14 @@ public class DatabaseConfiguration {
 	
 	@Autowired
 	private Environment env;
+	
+	@Bean
+	@Profile("memDb")
+	public DataSource inMemoryDb(){
+		EmbeddedDatabaseBuilder builder = new EmbeddedDatabaseBuilder();
+		builder.setType(EmbeddedDatabaseType.H2).addScript("db/create-db.sql");
+		return builder.build();
+	}
 	
 	@Bean
 	@Profile("devDb")

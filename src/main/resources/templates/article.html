@@ -3,9 +3,7 @@
 	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	  layout:decorator="layouts/default">
 	  <head>
-	  	<title>Article Management System</title>
-	  	<link rel="stylesheet" th:href="@{/css/article.css}"/>
-	  	
+	  	<title>List Article</title>
 	  </head>
 <body>
 	<div class="ui container" layout:fragment="content">	
@@ -44,9 +42,9 @@
 					<td th:text="*{category.name}">Category</td>
 					<td>
 						<div class="ui small basic icon buttons">
-							<a class="ui green basic button" th:href="@{article/{id}(id=*{id})}"><i class="unhide icon"></i></a>
+							<a class="ui green basic button" th:href="@{article/view/{id}(id=*{id})}"><i class="unhide icon"></i></a>
 							<a class="ui blue basic button" th:href="@{article/edit/{id}(id=*{id})}"><i class="write icon"></i></a>
-							<a class="ui red basic button" th:href="@{article/remove/{id}(id=*{id})}"><i class="trash icon"></i></a>
+							<a class="ui red basic button" th:href="@{article/remove/{id}(id=*{id}, page=${paging.page}, title=${filter.title}, categoryId=${filter.categoryId})}"><i class="trash icon"></i></a>
 						</div>
 					</td>
 				</tr>	
@@ -107,13 +105,15 @@
 	  	  					searchArticle(search);
 	  	  				}
 	  	  			});
-	  	  			
+
+
+	  	  			//TODO: search by title or by categoryId
+	  	  			var searchArticle = function(search){
+	  	  				location.href = "/?page=1&title=" + search.title + "&categoryId=" + search.categoryId;
+	  	  			}
+  	  			
   	  			})();
   	  			
-  	  			//TODO: search by title or by categoryId
-  	  			var searchArticle = function(search){
-  	  				location.href = "/?page=1&title=" + search.title + "&categoryId=" + search.categoryId;
-  	  			}
   	  			
   	  		</script>
   	 </th:block>

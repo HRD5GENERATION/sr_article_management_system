@@ -1,5 +1,6 @@
 package com.sr.model;
 
+import javax.validation.Valid;
 import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.NotEmpty;
@@ -15,6 +16,7 @@ public class Article {
 	
 	private String thumbnail;
 	
+	@Valid
 	private Category category;
 	
 	public Article() {
