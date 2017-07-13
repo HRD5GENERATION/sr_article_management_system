@@ -2,7 +2,6 @@ package com.sr.configuration;
 
 import javax.sql.DataSource;
 
-import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -18,12 +17,13 @@ public class MyBatisConfiguration {
 	@Autowired
 	private DataSource dataSource;
 	
-	@Bean
+	//TODO: Mybatis will auto configure by default, by auto detect an existing DataSource
+	/*@Bean
 	public SqlSessionFactoryBean sqlSessionFactoryBean(){
 		SqlSessionFactoryBean sessionFactoryBean = new SqlSessionFactoryBean();
 		sessionFactoryBean.setDataSource(dataSource);
 		return sessionFactoryBean;
-	}
+	}*/
 	
 	@Bean
 	public DataSourceTransactionManager transactionManager(){
