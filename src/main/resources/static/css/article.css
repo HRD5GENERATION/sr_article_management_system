@@ -5,3 +5,8 @@ div.footer{
 div.footer h3 {
 	margin-top:10px;
 }
+
+.title-center{
+	text-align:center;
+	margin-bottom: 20px;
+}

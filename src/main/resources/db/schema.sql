@@ -1,7 +1,6 @@
 DROP TABLE IF EXISTS tbarticle;
 DROP TABLE IF EXISTS tbcategory;
 
-
 CREATE TABLE tbcategory(
 	id serial primary key,
     name VARCHAR(50)

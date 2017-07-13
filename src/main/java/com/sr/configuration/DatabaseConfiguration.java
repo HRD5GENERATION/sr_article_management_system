@@ -45,15 +45,14 @@ public class DatabaseConfiguration {
 	@Profile("memDb")
 	public DataSource inMemoryDb(){
 		EmbeddedDatabaseBuilder builder = new EmbeddedDatabaseBuilder();
-		builder.setType(EmbeddedDatabaseType.H2)
-			   .addScript("db/schema.sql")
-			   .addScript("db/data.sql");
+		builder.setType(EmbeddedDatabaseType.H2);
+			  //.addScript("db/schema.sql")
+			  //.addScript("db/data.sql");
 		return builder.build();
 	}
 	
-	
 	/*
-	//TODO: Database Initialization
+	//TODO: Manually enable database initialization
 	@Value("classpath:db/schema.sql")
 	private Resource schema;
 	
