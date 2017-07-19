@@ -8,6 +8,22 @@
 </head>
 <body>
 	<div id="content" layout:fragment="content">
+		<h1 class="ui title-center">Article Management System</h1>
+		
+		<div class="ui">
+			<a class="ui primary basic button" href="/ajax/article/add">
+				<i class="write icon"></i>
+				<span>Add Article</span>
+			</a>
+			<select class="ui dropdown">
+				  <option value="">All Categories</option>
+			</select>
+			<div class="ui icon input">
+				  <input type="text" id="searchByTitle" placeholder="Search by title..."/>
+				  <i class="search icon"></i>
+			</div>
+		</div>
+		
 		<table class="ui celled table">
 			<thead>
 				<tr>
@@ -18,49 +34,84 @@
 					<th th:text="#{index.table.action}">Action</th>
 				</tr>
 			</thead>
-			<tbody>
-				
-			</tbody>	
-			<tfoot>
-				 <tr>
-				 	<th colspan="5">
-				      			      
-				    </th>
-				  </tr>
-			</tfoot>
+			<tbody></tbody>
 		</table>
-		
-		<button id="load">Load more</button>
+		<button class="ui button" id="loadMore">Load more</button>
 	</div>
 	
 	<th:block layout:fragment="script">
   	  	<script th:inline="javascript">
-			(function(){
+			//define default filter
+			var filter = {
+				page: 1,
+				limit: 10,
+				title: null,
+				categoryId: null,
+			};
+			
+			//load all articles
+			findAllArticles(filter);
+			
+			//load more article on click
+			$('#loadMore').click(function(){
+				filter.page++;
+				findAllArticles(filter);	
+			});
 				
+			//find all articles
+			function findAllArticles(filter){
 				$.ajax({
-					url: '/ajax/articles',
+					url: '/api/v1/articles',
 					method: 'GET',
-					success: function(articles){
-						console.log(articles);
-						var tr = '';
-						articles.forEach(function(article){
-							tr += "<tr>" +
-										"<td>" + article.id + "</td><td>" + article.title + "</td><td>" + article.description + "</td><td>" + article.category.name + "</td>" +
-										"<td><div class=\"ui small basic icon buttons\">" + 
-											"<a class=\"ui green basic button\" href=\"/article/view/"+ article.id +"\"><i class=\"unhide icon\"></i></a>" +
-											"<a class=\"ui blue basic button\" href=\"/article/edit/"+ article.id +"\"><i class=\"write icon\"></i></a>" +
-											"<a class=\"ui red basic button\" href=\"/article/remove/"+ article.id +"\"><i class=\"trash icon\"></i></a>" +
-										"</div></td>"
-								  "</tr>";
-						});
-						$('tbody').html(tr);
+					data: filter,
+					success: function(response){
+						console.log(response);
+						if(response.status)
+							renderView(response.data);								
+					},
+					error: function(error){
+						console.log(error);
+					}
+				});	
+			}
+								
+			//render view to display articles
+			function renderView(articles){
+				var tr = ``;
+				articles.forEach(function(article){
+					tr += `<tr>
+								<td>${article.id}</td>
+								<td>${article.title}</td>
+								<td>${article.description}</td>
+								<td>${article.category.name}</td>
+								<td>
+									<div class="ui small basic icon buttons">
+										<a class="ui green basic button" href="#"><i class="unhide icon"></i></a>
+										<a class="ui blue basic button" href="#"><i class="write icon"></i></a>
+										<a class="ui red basic button" onclick='removeArticle(${article.id});' href="#"><i class="trash icon"></i></a>
+									</div>
+								</td>
+							</tr>`;
+				});
+				$('tbody').html(tr);
+			}
+				
+			//remove article by id
+			function removeArticle(id){
+				$.ajax({
+					url: '/api/v1/articles/' + id,
+					method: 'DELETE',
+					success: function(response){
+						console.log(response);
+						if(response.status)
+							findAllArticles(filter);
 					},
 					error: function(error){
 						console.log(error);
 					}
 				});
-				
-			})();
+			};
+			
 		</script>
 	</th:block>
 </body>

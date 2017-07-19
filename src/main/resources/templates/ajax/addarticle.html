@@ -9,7 +9,6 @@
 	<div class="ui container" layout:fragment="content">
 		<h1>Add Article</h1>
 		<form class="ui form">
-			
 			<div class="field">
 		    	<label>Title</label>
 		    	<input type="text" id="title"/>
@@ -38,7 +37,6 @@
 			  <div class="or"></div>
 			  <input class="ui positive button" type="submit" value="Add"/>
 			</div>
-			
 		</form>
 	</div>
 	
@@ -71,7 +69,7 @@
   	  					console.log(article);
   	  					
   	  					$.ajax({
-  	  						url: '/ajax/article',
+  	  						url: '/api/v1/articles',
   	  						method: 'POST',
   	  						
   	  						data: JSON.stringify(article), //convert to json string
@@ -89,7 +87,7 @@
   	  				//load all categories from server
   	  				function loadCategories(){
   	  					$.ajax({
-  	  						url: '/ajax/categories',
+  	  						url: '/api/v1/categories',
   	  						method: 'GET',
   	  						success: function(response){
   	  							console.log(response);
@@ -116,12 +114,12 @@
   	  					
   	  					//to upload file, u need to add it to form data
   	  					var formData = new FormData();
-  	  					formData.append('thumbnail', file);
+  	  					formData.append('file', file);
   	  					
   	  					console.log(formData);
   	  					
   	  					$.ajax({
-  	  						url: '/ajax/article/upload',
+  	  						url: '/api/v1/uploads',
   	  						method: 'POST',
   	  						
   	  						//to upload file, u need this 3 attributes
@@ -138,7 +136,6 @@
   	  						}
   	  					});
   	  				}
-  	  				
   	  			})();
   	  		</script>
   	 </th:block>
