@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorator="layouts/default">
+<head>
+	<title >Add Article</title>
+</head>
+<body>	
+	<div class="ui container" layout:fragment="content">
+		<h1>Add Article</h1>
+		<form class="ui form">
+			
+			<div class="field">
+		    	<label>Title</label>
+		    	<input type="text" id="title"/>
+		  	</div>
+		  	
+		  	<div class="field">
+		    	<label>Description</label>
+		    	<textarea rows="5" id="description"></textarea>
+		  	</div>
+		  	
+		  	<div class="field">
+		    	<label>Category</label>
+		  		<select class="ui dropdown" id="category">
+					  <option value="">Choose Category</option>
+				</select>
+		  	</div>
+		  	
+		  	<div class="field">
+		    	<label>Thumbnail</label>
+		    	<input type="hidden" id="thumbnail"/>
+		    	<input type="file" id="file"/>
+		  	</div>
+		  	
+		  	<div class="ui buttons right floated">
+			  <a href="/" class="ui button">Cancel</a>
+			  <div class="or"></div>
+			  <input class="ui positive button" type="submit" value="Add"/>
+			</div>
+			
+		</form>
+	</div>
+	
+	<th:block layout:fragment="script">
+  	  		<script th:inline="javascript">
+  	  		
+  	  			(function(){
+  	  				
+  	  				loadCategories();
+  	  				
+  	  				$('form').submit(function(evt){
+  	  					evt.preventDefault(); //prevent browser refresh when submit
+
+  	  					//TODO: Add Article
+  	  					addArticle();
+  	  				});
+  	  				
+  	  				//add article to server
+  	  				function addArticle(){
+  	  					
+  	  					var article = {
+  	  						'title' : $('#title').val(),
+  	  						'description': $('#description').val(),
+  	  						'category': {
+  	  							'id' : $('select#category').val()
+  	  						},
+  	  						'thumbnail': $('#thumbnail').val()
+  	  					};
+  	  					
+  	  					console.log(article);
+  	  					
+  	  					$.ajax({
+  	  						url: '/ajax/article',
+  	  						method: 'POST',
+  	  						
+  	  						data: JSON.stringify(article), //convert to json string
+  	  						contentType: 'application/json',
+  	  						
+  	  						success: function(response){
+  	  							console.log(response);
+  	  						},
+  	  						error: function(error){
+  	  							console.log(error);
+  	  						}
+  	  					});
+	  				}
+  	  				
+  	  				//load all categories from server
+  	  				function loadCategories(){
+  	  					$.ajax({
+  	  						url: '/ajax/categories',
+  	  						method: 'GET',
+  	  						success: function(response){
+  	  							console.log(response);
+  	  							var option = '';
+  	  							response.forEach(function(category){
+  	  								option += '<option value='+ category.id +'>'+ category.name +'</option>'
+  	  							});
+  	  							$('select#category').html(option);
+  	  						},
+  	  						error: function(error){
+  	  							console.log(error);
+  	  						}
+  	  					});
+  	  				}
+  	  				
+  	  				//TODO: on file choose
+  	  				$('#file').on('change', function(){
+  	  					var file = $(this)[0].files[0];
+  	  					uploadFile(file);
+  	  				});
+  	  				
+  	  				//TODO: upload file to server and get thumbnail url back
+  	  				function uploadFile(file){
+  	  					
+  	  					//to upload file, u need to add it to form data
+  	  					var formData = new FormData();
+  	  					formData.append('thumbnail', file);
+  	  					
+  	  					console.log(formData);
+  	  					
+  	  					$.ajax({
+  	  						url: '/ajax/article/upload',
+  	  						method: 'POST',
+  	  						
+  	  						//to upload file, u need this 3 attributes
+  	  						data: formData,
+  	  						contentType: false,
+  	  						processData: false,
+  	  					
+  	  						success: function(thumbnail){
+  	  							console.log(thumbnail);
+  	  							$('#thumbnail').val(thumbnail);
+  	  						},
+  	  						error: function(error){
+  	  							console.log(error)
+  	  						}
+  	  					});
+  	  				}
+  	  				
+  	  			})();
+  	  		</script>
+  	 </th:block>
+</body>
+</html>

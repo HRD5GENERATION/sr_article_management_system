@@ -1,45 +1,67 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorator="layouts/default">
 <head>
 <meta charset="ISO-8859-1"/>
-	<title>Insert title here</title>
+	<title>Ajax List Article</title>
 </head>
 <body>
-	<div id="content">
-		<table>
+	<div id="content" layout:fragment="content">
+		<table class="ui celled table">
 			<thead>
 				<tr>
-					<th>Id</th>
-					<th>Title</th>
+					<th th:text="#{index.table.id}">No</th>
+					<th th:text="#{index.table.title}">Title</th>
+					<th th:text="#{index.table.desc}">Description</th>
+					<th th:text="#{index.table.category}">Category</th>
+					<th th:text="#{index.table.action}">Action</th>
 				</tr>
 			</thead>
 			<tbody>
-			
-			</tbody>
+				
+			</tbody>	
+			<tfoot>
+				 <tr>
+				 	<th colspan="5">
+				      			      
+				    </th>
+				  </tr>
+			</tfoot>
 		</table>
 		
+		<button id="load">Load more</button>
 	</div>
-	<button id="load">Load more</button>
 	
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-	<script>
-		(function(){
-			$.ajax({
-				url: '/ajax/articles',
-				method: 'GET',
-				success: function(data){
-					var tr = "";
-					data.forEach(function(d){
-						tr += "<tr><td>" + d.id + "</td><td>" + d.title + "</td></tr>";
-					});
-					
-					$('tbody').html(tr);
-				},
-				error: function(error){
-					console.log(error);
-				}
-			});
-		})();
-	</script>
+	<th:block layout:fragment="script">
+  	  	<script th:inline="javascript">
+			(function(){
+				
+				$.ajax({
+					url: '/ajax/articles',
+					method: 'GET',
+					success: function(articles){
+						console.log(articles);
+						var tr = '';
+						articles.forEach(function(article){
+							tr += "<tr>" +
+										"<td>" + article.id + "</td><td>" + article.title + "</td><td>" + article.description + "</td><td>" + article.category.name + "</td>" +
+										"<td><div class=\"ui small basic icon buttons\">" + 
+											"<a class=\"ui green basic button\" href=\"/article/view/"+ article.id +"\"><i class=\"unhide icon\"></i></a>" +
+											"<a class=\"ui blue basic button\" href=\"/article/edit/"+ article.id +"\"><i class=\"write icon\"></i></a>" +
+											"<a class=\"ui red basic button\" href=\"/article/remove/"+ article.id +"\"><i class=\"trash icon\"></i></a>" +
+										"</div></td>"
+								  "</tr>";
+						});
+						$('tbody').html(tr);
+					},
+					error: function(error){
+						console.log(error);
+					}
+				});
+				
+			})();
+		</script>
+	</th:block>
 </body>
 </html>
