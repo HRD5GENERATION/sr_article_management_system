@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorator="layouts/default">
+	  <head>
+	  	<title>List Article</title>
+	  </head>
+<body>
+	<div class="ui container" layout:fragment="content">	
+		<h1 class="ui title-center">Article Management System</h1>
+		
+		<div class="ui">
+			<a class="ui primary basic button" href="/article/add" th:href="@{/article/add}">
+				<i class="write icon"></i>
+				<span>Add Article</span>
+			</a>
+			<select class="ui dropdown">
+				  <option value="">All Categories</option>
+				  <option th:each="category: ${categories}" th:value="${category.id}" th:text="${category.name}">Technology</option>
+			</select>
+			<div class="ui icon input">
+				  <input type="text" id="searchByTitle" th:value="${filter.title}" placeholder="Search by title..."/>
+				  <i class="search icon"></i>
+			</div>
+		</div>
+
+		<table class="ui celled table" th:if="${#lists.size(articles) != 0}">
+			<thead>
+				<tr>
+					<th th:text="#{index.table.id}">No</th>
+					<th th:text="#{index.table.title}">Title</th>
+					<th th:text="#{index.table.desc}">Description</th>
+					<th th:text="#{index.table.category}">Category</th>
+					<th th:text="#{index.table.action}">Action</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:fragment="articleFragment" th:each="article : ${articles}" th:object="${article}">
+					<td th:text="${articleStat.count}">Id</td>
+					<td th:text="*{title}">Title</td>
+					<td th:text="*{description}">Description</td>
+					<td th:text="*{category.name}">Category</td>
+					<td>
+						<div class="ui small basic icon buttons">
+							<a class="ui green basic button" th:href="@{article/view/{id}(id=*{id})}"><i class="unhide icon"></i></a>
+							<a class="ui blue basic button" th:href="@{article/edit/{id}(id=*{id})}"><i class="write icon"></i></a>
+							<a class="ui red basic button" th:href="@{article/remove/{id}(id=*{id}, page=${paging.page}, title=${filter.title}, categoryId=${filter.categoryId})}"><i class="trash icon"></i></a>
+						</div>
+					</td>
+				</tr>	
+			</tbody>	
+			<tfoot >
+				 <tr>
+				 	<th colspan="5">
+				      <div class="ui small right floated pagination menu">
+				        
+				        <a class="icon item" title="First" th:href="@{/(page=1, title=${filter.title}, categoryId=${filter.categoryId})}"><i class="left long arrow icon"></i></a>
+				        <a class="item" th:href="@{/(page=${paging.previousPage}, title=${filter.title}, categoryId=${filter.categoryId})}">Previous</a>
+				        
+				        <a class="item" th:each="i: ${#numbers.sequence(paging.startPage, paging.endPage)}" th:text="${i}" th:classappend="${paging.page}==${i}?'active'" th:href="@{/(page=${i}, title=${filter.title}, categoryId=${filter.categoryId})}">1</a>
+				        
+				        <a class="item" th:href="@{/(page=${paging.nextPage}, title=${filter.title}, categoryId=${filter.categoryId})}">Next</a>
+				        <a class="icon item" title="Last" th:href="@{/(page=${paging.totalPages}, title=${filter.title}, categoryId=${filter.categoryId})}"><i class="right long arrow icon"></i></a>
+				      
+				      </div>				      
+				    </th>
+				  </tr>
+			</tfoot>
+		</table>
+		<div class="ui info message" th:unless="${#lists.size(articles) != 0}">
+			  <div class="header">No Article</div>
+			  <p>There is no article to show.</p>
+		</div>
+		
+	</div>
+	<th:block layout:fragment="script">
+  	  		<script th:inline="javascript">
+  	  			(function(){
+		  	  	    
+  	  				//TODO: Retrieve data from model
+  	  				/*<![CDATA[*/
+		  	  	    var filter = /*[[${filter}]]*/ "";
+		  	  	    /*]]>*/
+		  	  	
+		  	  	    //TODO:
+  	  				var search = {
+		  	  	    	title: filter.title == null ? '' : filter.title,
+		  	  	    	categoryId: filter.categoryId == null ? '' : filter.categoryId
+		  	  	    };
+  	  			
+  	  				//TODO: Semantic Initialized, Set selected category
+  	  				$('.ui.dropdown')
+  	  					.dropdown('set selected', filter.categoryId)
+	  	  				.dropdown({
+		  	  				onChange: function(value, text){
+		  	  					search.categoryId = value;
+		  	  					searchArticle(search);
+		  	  				}
+	  	  			});
+  	  			
+	  	  			//TODO: OnSearch Enter Event
+	  	  			$('#searchByTitle').keyup(function(e){
+	  	  				if(e.keyCode == 13){
+		  	  				search.title = $('#searchByTitle').val();
+	  	  					searchArticle(search);
+	  	  				}
+	  	  			});
+
+
+	  	  			//TODO: search by title or by categoryId
+	  	  			var searchArticle = function(search){
+	  	  				location.href = "/?page=1&title=" + search.title + "&categoryId=" + search.categoryId;
+	  	  			}
+  	  			
+  	  			})();
+  	  		</script>
+  	 </th:block>
+</body>
+
+</html>

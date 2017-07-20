@@ -3,11 +3,11 @@
 	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	  layout:decorator="layouts/default">
 <head>
-	<title >Add Article</title>
+	<title>Ajax Add Article</title>
 </head>
 <body>	
 	<div class="ui container" layout:fragment="content">
-		<h1>Add Article</h1>
+		<h1>Ajax Add Article</h1>
 		<form class="ui form">
 			<div class="field">
 		    	<label>Title</label>
@@ -33,7 +33,7 @@
 		  	</div>
 		  	
 		  	<div class="ui buttons right floated">
-			  <a href="/" class="ui button">Cancel</a>
+			  <a href="/ajax/home" class="ui button">Cancel</a>
 			  <div class="or"></div>
 			  <input class="ui positive button" type="submit" value="Add"/>
 			</div>
@@ -44,8 +44,6 @@
   	  		<script th:inline="javascript">
   	  		
   	  			(function(){
-  	  				
-  	  				loadCategories();
   	  				
   	  				$('form').submit(function(evt){
   	  					evt.preventDefault(); //prevent browser refresh when submit
@@ -72,7 +70,7 @@
   	  						url: '/api/v1/articles',
   	  						method: 'POST',
   	  						
-  	  						data: JSON.stringify(article), //convert to json string
+  	  						data: JSON.stringify(article), //convert json object to json string
   	  						contentType: 'application/json',
   	  						
   	  						success: function(response){
@@ -136,6 +134,19 @@
   	  						}
   	  					});
   	  				}
+  	  				
+  	  				//TODO: initialize
+  	  				
+  	  				//call load all categories function
+  	  				loadCategories();
+  	  				
+  	  				//initial select option
+	  	  			$('.ui.dropdown')
+		  				.dropdown({
+	  	  				onChange: function(value, text){	
+	  	  					console.log(value);
+	  	  				}
+		  			});
   	  			})();
   	  		</script>
   	 </th:block>

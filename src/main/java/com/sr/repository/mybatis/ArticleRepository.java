@@ -27,9 +27,10 @@ public interface ArticleRepository {
 	})
 	List<Article> findAll();
 
-	@Select("SELECT id, title, description, thumbnail, category_id FROM tbarticle WHERE id=#{id}")
+	@Select("SELECT A.id, A.title, A.description, A.thumbnail, A.category_id, C.name FROM tbarticle A INNER JOIN tbcategory C ON C.id=A.category_id WHERE A.id=#{id}")
 	@Results({
-		@Result(property="category.id", column="category_id")
+		@Result(property="category.id", column="category_id"),
+		@Result(property="category.name", column="name")
 	})
 	Article findOne(int id);
 

@@ -60,9 +60,11 @@ public class ArticleRestController {
 	@GetMapping("/articles/{id}")
 	public Map<String, Object> findOne(@PathVariable("id") Integer id){
 		Map<String, Object> response = new HashMap<>();
-		if(articleService.findOne(id) != null){
+		Article article = articleService.findOne(id);
+		if(article != null){
 			response.put("message", "Article Found!");
 			response.put("status", true);
+			response.put("data", article);
 		}else{
 			response.put("message", "Article Not Found!");
 			response.put("status", false);

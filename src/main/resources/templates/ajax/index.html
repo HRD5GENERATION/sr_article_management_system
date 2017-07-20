@@ -5,17 +5,25 @@
 <head>
 <meta charset="ISO-8859-1"/>
 	<title>Ajax List Article</title>
+	<style>
+		.category{
+			background-color: green;
+			color: #fff;
+			border-radius: 3px;
+			padding: 1px 3px;
+		}
+	</style>
 </head>
 <body>
 	<div id="content" layout:fragment="content">
-		<h1 class="ui title-center">Article Management System</h1>
+		<h1 class="ui title-center">Ajax Article Management System</h1>
 		
 		<div class="ui">
 			<a class="ui primary basic button" href="/ajax/article/add">
 				<i class="write icon"></i>
 				<span>Add Article</span>
 			</a>
-			<select class="ui dropdown">
+			<select class="ui dropdown" id="category">
 				  <option value="">All Categories</option>
 			</select>
 			<div class="ui icon input">
@@ -35,8 +43,26 @@
 				</tr>
 			</thead>
 			<tbody></tbody>
+			<tfoot>
+				<tr>
+				 	<th colspan="5">
+				    	<div class="ui small right floated pagination menu" id="pagination"></div>				      
+				    </th>
+				</tr>
+			</tfoot>
 		</table>
-		<button class="ui button" id="loadMore">Load more</button>
+		
+		<div class="ui info message" id="message" style="display:none">
+			  <div class="header">No Article</div>
+			  <p>There is no article to show.</p>
+		</div>
+		
+		
+		<!--Modal View Article  -->
+		<div class="ui modal" id="viewArticle">
+			
+		</div>
+
 	</div>
 	
 	<th:block layout:fragment="script">
@@ -48,15 +74,6 @@
 				title: null,
 				categoryId: null,
 			};
-			
-			//load all articles
-			findAllArticles(filter);
-			
-			//load more article on click
-			$('#loadMore').click(function(){
-				filter.page++;
-				findAllArticles(filter);	
-			});
 				
 			//find all articles
 			function findAllArticles(filter){
@@ -66,15 +83,39 @@
 					data: filter,
 					success: function(response){
 						console.log(response);
-						if(response.status)
-							renderView(response.data);								
+						if(response.status){
+							toggleShow(true);
+							renderView(response.data);			
+							renderPagination(response.paging);
+							return;
+						}
+						toggleShow(false);
 					},
 					error: function(error){
 						console.log(error);
 					}
 				});	
 			}
-								
+				
+			//load all categories from server
+			function loadCategories(){
+				$.ajax({
+					url: '/api/v1/categories',
+					method: 'GET',
+					success: function(response){
+						console.log(response);
+						var option = '';
+						response.forEach(function(category){
+							option += '<option value='+ category.id +'>'+ category.name +'</option>'
+						});
+						$('select#category').append(option);
+					},
+					error: function(error){
+						console.log(error);
+					}
+				});
+			}
+			
 			//render view to display articles
 			function renderView(articles){
 				var tr = ``;
@@ -86,16 +127,16 @@
 								<td>${article.category.name}</td>
 								<td>
 									<div class="ui small basic icon buttons">
-										<a class="ui green basic button" href="#"><i class="unhide icon"></i></a>
-										<a class="ui blue basic button" href="#"><i class="write icon"></i></a>
-										<a class="ui red basic button" onclick='removeArticle(${article.id});' href="#"><i class="trash icon"></i></a>
+										<a class="ui green basic button" onclick='viewArticle(${article.id})'><i class="unhide icon"></i></a>
+										<a class="ui blue basic button"><i class="write icon"></i></a>
+										<a class="ui red basic button" id='del${article.id}' onclick='removeArticle(${article.id});' href="#"><i class="trash icon"></i></a>
 									</div>
 								</td>
 							</tr>`;
 				});
 				$('tbody').html(tr);
 			}
-				
+			
 			//remove article by id
 			function removeArticle(id){
 				$.ajax({
@@ -103,14 +144,104 @@
 					method: 'DELETE',
 					success: function(response){
 						console.log(response);
-						if(response.status)
-							findAllArticles(filter);
+						if(response.status){
+							//findAllArticles(filter);
+							$('#del' + id).parents('tr').remove(); //better way
+						}
 					},
 					error: function(error){
 						console.log(error);
 					}
 				});
 			};
+			
+			//TODO: pagination
+			function renderPagination(paging){
+				var pagination = `<a class="icon item" title="First" onclick='onPaging(1);'><i class="left long arrow icon"></i></a>
+					        	  <a class="item" onclick='onPaging(${paging.previousPage});'>Previous</a>`;
+				for(var p=paging.startPage; p<=paging.endPage; p++){
+					if(paging.page == p)
+						pagination += `<a class="item active" onclick='onPaging(${p});'>${p}</a>`;
+					else
+						pagination += `<a class="item" onclick='onPaging(${p});'>${p}</a>`;
+				}
+				pagination += `<a class="item" onclick='onPaging(${paging.nextPage});'>Next</a>
+					           <a class="icon item" title="Last" onclick='onPaging(${paging.totalPages});'><i class="right long arrow icon"></i></a>`;
+					           
+				$('#pagination').html(pagination);
+			}
+			
+			//TODO: on page click
+			function onPaging(page){
+				filter.page = page;
+				findAllArticles(filter);
+			}
+
+			//TODO: on search keyup
+  			$('#searchByTitle').keyup(function(e){
+  				if(e.keyCode == 13){
+  					filter.page = 1;
+ 	  				filter.title = $('#searchByTitle').val();
+ 	  				findAllArticles(filter);
+  				}
+  			});
+			
+  			//TODO: toggleShow
+			function toggleShow(status){
+				if(status){
+					$('table').fadeIn(0);
+					$('#message').fadeOut(0);
+				}
+				else{
+					$('table').fadeOut(0);	
+					$('#message').fadeIn(0);
+				}
+			}
+			
+			//TODO: on view article
+			function viewArticle(id){
+				$('.ui.modal').modal('show');
+				$.ajax({
+					url: '/api/v1/articles/' + id,
+					method: 'GET',
+					success: function(response){
+						console.log(response);
+						renderViewArticle(response.data);
+					},
+					error: function(error){
+						console.log(error);	
+					}
+				});
+			}
+			//render view article
+			function renderViewArticle(article){
+				var modalContent = `<i class="close icon"></i>
+									<div class="header">${article.title}</div>
+									<div class="image content">
+										<div class="image"><img src='${article.thumbnail}'></div>
+										<div class="description">${article.description} <span class='category'><b>${article.category.name}</b></span></div>
+									</div>`;
+				$('#viewArticle').html(modalContent);
+			}
+			
+			//TODO: initialize
+			
+			//load all articles
+			findAllArticles(filter);
+			
+			//load all categories
+			loadCategories();
+			
+			//initial select option
+  			$('.ui.dropdown')
+ 				.dropdown({
+ 					//on category change
+  					onChange: function(value, text){	
+  						filter.page = 1;
+  						filter.categoryId = value;
+  						findAllArticles(filter);
+  					}
+  			});
 			
 		</script>
 	</th:block>
