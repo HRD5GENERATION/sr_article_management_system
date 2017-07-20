@@ -33,7 +33,7 @@
 		  	</div>
 		  	
 		  	<div class="ui buttons right floated">
-			  <a href="/ajax/home" class="ui button">Cancel</a>
+			  <a href="/ajax" class="ui button">Cancel</a>
 			  <div class="or"></div>
 			  <input class="ui positive button" type="submit" value="Add"/>
 			</div>
@@ -41,6 +41,11 @@
 	</div>
 	
 	<th:block layout:fragment="script">
+			<script>
+	 	  		//set menu active
+				$('#ajax').addClass('active');
+			</script>
+			
   	  		<script th:inline="javascript">
   	  		
   	  			(function(){

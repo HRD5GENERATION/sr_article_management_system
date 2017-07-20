@@ -74,6 +74,10 @@
 		
 	</div>
 	<th:block layout:fragment="script">
+			<script>
+  	  			//set menu active
+				$('#thymeleaf').addClass('active');
+			</script>
   	  		<script th:inline="javascript">
   	  			(function(){
 		  	  	    
@@ -113,8 +117,6 @@
 	  	  			}
   	  			
   	  			})();
-  	  			
-  	  			
   	  		</script>
   	 </th:block>
 </body>

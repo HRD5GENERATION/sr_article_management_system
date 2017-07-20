@@ -1,4 +1,4 @@
-package com.sr.controller;
+package com.sr.controller.thymeleaf;
 
 import javax.validation.Valid;
 
@@ -36,7 +36,7 @@ public class ArticleController {
 		this.categoryService = categoryService;
 	}
 	
-	@GetMapping({"/", "/home", "/index", "/article"})
+	@GetMapping({"/", "/home", "/index", "/article", "/thymeleaf"})
 	public String home(ArticleFilter filter, Paging paging, Model model){
 		
 		model.addAttribute("categories", categoryService.findAll());
