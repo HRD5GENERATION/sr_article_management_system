@@ -90,8 +90,11 @@
 						console.log(response);
 						if(response.status){
 							toggleShow(true);
+							
 							renderView(response.data);			
 							renderPagination(response.paging);
+							
+							history.pushState(null, '', serializeJSObject(filter));
 							return;
 						}
 						toggleShow(false);
@@ -150,7 +153,6 @@
 					success: function(response){
 						console.log(response);
 						if(response.status){
-							//findAllArticles(filter);
 							$('#del' + id).parents('tr').remove(); //better way
 						}
 					},
@@ -247,6 +249,19 @@
   						findAllArticles(filter);
   					}
   			});
+			
+  			//TODO: JAVASCRIPT PUSH STATE
+  	  		
+  	  		//when user navigate in browser history
+  	  		$(window).bind('popstate', function(){
+  	  			location.href = location.href;
+  	  		});
+	  			
+  	  		//TODO: 
+  	  		function serializeJSObject(jsObject){
+		  	  	return location.pathname + '?' + jQuery.param( jsObject );
+  	  		}
+  	  		
 			
 		</script>
 	</th:block>

@@ -33,6 +33,7 @@ public class ThymeleafAjaxController {
 		
 		model.addAttribute("categories", categoryService.findAll());
 		model.addAttribute("articles", articleService.findAllFilter(filter, paging));
+		model.addAttribute("filter", filter);
 		model.addAttribute("paging", paging);
 		
 		return "thymeleaf-ajax/index";
@@ -40,7 +41,6 @@ public class ThymeleafAjaxController {
 	
 	@GetMapping("/articles")
 	public String pageClick(ArticleFilter filter, Paging paging, Model model){
-		model.addAttribute("categories", categoryService.findAll());
 		model.addAttribute("articles", articleService.findAllFilter(filter, paging));
 		model.addAttribute("paging", paging);	
 		

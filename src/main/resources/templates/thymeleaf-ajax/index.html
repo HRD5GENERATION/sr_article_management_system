@@ -41,7 +41,7 @@
 					</tr>
 				</thead>
 				<tbody>
-					<tr th:fragment="articleFragment" th:each="article : ${articles}" th:object="${article}">
+					<tr th:each="article : ${articles}" th:object="${article}">
 						<td th:text="*{id}">Id</td>
 						<td th:text="*{title}">Title</td>
 						<td th:text="*{description}">Description</td>
@@ -85,25 +85,22 @@
 			</script>
 	
   	  		<script th:inline="javascript">
-	
+				
+  	  			//TODO: Retrieve data from model
+				/*<![CDATA[*/
+  	  	    	var filter = /*[[${filter}]]*/ {};
+  	  	   		/*]]>*/
+  	  	   		 
 	  	  	    //TODO:
- 	 			var filter = {
+ 	 			filter = {
 	  	  	    	page: 1,
 	  	  	    	limit: 10,
-	  	  	    	title: null,
-	  	  	    	categoryId: null
+	  	  	    	title: filter.title == null ? '' : filter.title,
+	  	  	    	categoryId: filter.categoryId == null ? '' : filter.categoryId
 	  	  	    };
  	  			
- 	 			//TODO: Semantic Initialized, Set selected category
- 	 			$('.ui.dropdown')
-  	  				.dropdown({
-	  	  				onChange: function(value, text){
-	  	  					filter.page = 1;
-	  	  					filter.categoryId = value;
-	  	  					loadArticles(filter);	
-	  	  				}
-  	  			});
- 	  			
+ 	 			console.log(filter);
+ 	 			
   	  			//TODO: Onfilter Enter Event
   	  			$('#filterByTitle').keyup(function(e){
   	  				if(e.keyCode == 13){
@@ -121,6 +118,9 @@
   						data: filter,
  	  						success: function(response){
   							$('#articleTable').html(response);
+							
+  							//change url
+			  	  			history.pushState(null, '', serializeJSObject(filter)); 
   						},
   						error: function(error){
   							console.log(error);
@@ -150,6 +150,36 @@
   	  				filter.page = page;
   	  				loadArticles(filter);
   	  			}
+				
+	  	  		//TODO: intialize block
+	  	  		
+	  	  		//TODO: set value to search box
+	  	  		$('#filterByTitle').val(filter.title);
+  	  			
+	  	  		//TODO: Semantic Initialized, Set selected category
+ 	 			$('.ui.dropdown')
+ 	 				.dropdown('set selected', filter.categoryId)
+  	  				.dropdown({
+	  	  				onChange: function(value, text){
+	  	  					filter.page = 1;
+	  	  					filter.categoryId = value;
+	  	  					loadArticles(filter);
+	  	  				}
+  	  			});
+	  	  		
+	  	  		
+	  	  		//TODO: ADDITIONAL
+	  	  		
+	  	  		//when user navigate in browser history
+	  	  		$(window).bind('popstate', function(){
+	  	  			location.href = location.href;
+	  	  		});
+  	  			
+	  	  		//TODO: 
+	  	  		function serializeJSObject(jsObject){
+			  	  	return location.pathname + '?' + jQuery.param( jsObject );
+	  	  		}
+	  	  		
   	  		</script>
   	 </th:block>
 </body>
